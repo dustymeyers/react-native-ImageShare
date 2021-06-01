@@ -18,9 +18,9 @@ export default function App() {
 
       <TouchableOpacity
         onPress={() => alert('Hello, world!')}
-        style={{ backgroundColor: 'blue' }}
+        style={styles.button}
       >
-        <Text style={{ fontSize: 20, color: '#fff'}}>Pick a Photo</Text>
+        <Text style={styles.buttonText}>Pick a Photo</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,5 +42,15 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 18,
     marginHorizontal: 15,
-  }
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "blue",
+    padding: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: '#fff',
+  },
 });

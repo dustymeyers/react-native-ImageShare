@@ -2,11 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
 
 // import logo from './assets/logo.png'; 
 // ^ needed if you want to source your images locally ^
 
 export default function App() {
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   // async function that first checks if user has permission to access the media library
   // handles image picker
@@ -19,7 +21,34 @@ export default function App() {
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    console.log(pickerResult);
+
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    // console.log(pickerResult);
+    setSelectedImage({ localUri: pickerResult.uri })
+  };
+
+  let openShareDialogAsync = async () => {
+    if (!(await Sharing.isAvailableAsync())) {
+      alert(`Uh oh, sharing isn't available on your platform`);
+      return;
+    }
+  }
+  
+  if (selectedImage !== null) {
+    return(
+      <View style={styles.container}>
+        <Image
+          source={{ uri: selectedImage.localUri }}
+          style={styles.thumbnail}
+        />
+        <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
+          <Text style={styles.buttonText}>Share this photo</Text>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   return (
@@ -70,4 +99,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
   },
+  thumbnail: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain"
+  }
 });
